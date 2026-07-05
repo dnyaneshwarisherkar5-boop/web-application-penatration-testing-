@@ -1,0 +1,44 @@
+import requests
+
+def check_security(url):
+    try:
+        response = requests.get(url)
+
+        print("\n--- Web Application Security Report ---\n")
+
+        # Status Code
+        print("Status Code:", response.status_code)
+
+        # Security Headers Check
+        headers = response.headers
+
+        security_headers = [
+            "Content-Security-Policy",
+            "X-Frame-Options",
+            "X-XSS-Protection",
+            "Strict-Transport-Security",
+            "X-Content-Type-Options"
+        ]
+
+        print("\nSecurity Headers Check:")
+        for header in security_headers:
+            if header in headers:
+                print(f"[OK] {header} is present")
+            else:
+                print(f"[MISSING] {header} not found")
+
+        # Server Info
+        print("\nServer Info:", headers.get("Server", "Not Revealed"))
+
+        # HTTPS Check
+        if url.startswith("https"):
+            print("\n[OK] HTTPS is enabled")
+        else:
+            print("\n[WARNING] HTTPS is NOT enabled")
+
+    except Exception as e:
+        print("Error:", e)
+
+# Input
+target_url = input("Enter website URL (https://example.com): ")
+check_security(target_url)
